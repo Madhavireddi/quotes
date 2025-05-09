@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, Container, Nav, Tab, Tabs } from 'react-bootstrap';
 
 interface Comic {
   id: string;
@@ -16,7 +15,7 @@ interface Comic {
 
 function CreatorDashboardPage() {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null); // Replace with actual auth logic
+  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [comics, setComics] = useState<Comic[]>([
     {
@@ -55,9 +54,8 @@ function CreatorDashboardPage() {
   ]);
 
   useEffect(() => {
-    // Mock loading
     setTimeout(() => {
-      const mockUser = { role: "creator" }; // Replace with real auth check
+      const mockUser = { role: "creator" };
       setUser(mockUser);
       setLoading(false);
     }, 1000);
@@ -71,58 +69,60 @@ function CreatorDashboardPage() {
   }, [loading, user, navigate]);
 
   if (loading) {
-    return <Container className="text-center mt-5">Loading...</Container>;
+    return <div style={{ textAlign: 'center', marginTop: '2rem' }}>Loading...</div>;
   }
 
   return (
-    <Container className="mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
+    <div style={{ padding: '2rem' }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '1.5rem'
+      }}>
         <h1>Creator Dashboard</h1>
-        <Button onClick={() => navigate('/create')}>+ Create New Comic</Button>
+        <button onClick={() => navigate('/create')}>+ Create New Comic</button>
       </div>
 
-      <Tabs defaultActiveKey="comics" className="mb-3">
-        <Tab eventKey="comics" title="My Comics">
-          <div className="row">
-            {comics.map((comic) => (
-              <div key={comic.id} className="col-md-4 mb-4">
-                <Card>
-                  <Card.Img variant="top" src={comic.coverImage} />
-                  <Card.Body>
-                    <Card.Title>{comic.title}</Card.Title>
-                    <Card.Text>{comic.description}</Card.Text>
-                    <small className="text-muted">
-                      {comic.chapters} chapters - Last updated: {comic.lastUpdated}
-                    </small>
-                  </Card.Body>
-                  <Card.Footer>
-                    <div className="d-flex justify-content-between">
-                      <small>{comic.views} views</small>
-                      <small>{comic.likes} likes</small>
-                      <small>{comic.comments} comments</small>
-                    </div>
-                  </Card.Footer>
-                </Card>
-              </div>
-            ))}
+      <div style={{ marginBottom: '1rem' }}>
+        <span style={{ marginRight: '1rem', fontWeight: 'bold' }}>My Comics</span>
+        <span style={{ marginRight: '1rem', color: 'gray' }}>Analytics</span>
+        <span style={{ color: 'gray' }}>Settings</span>
+      </div>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+        {comics.map((comic) => (
+          <div key={comic.id} style={{
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            width: '300px',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            background: '#fff'
+          }}>
+            <img src={comic.coverImage} alt={comic.title} style={{ width: '100%' }} />
+            <div style={{ padding: '1rem', flexGrow: 1 }}>
+              <h3 style={{ margin: '0 0 0.5rem' }}>{comic.title}</h3>
+              <p>{comic.description}</p>
+              <small>{comic.chapters} chapters - Last updated: {comic.lastUpdated}</small>
+            </div>
+            <div style={{
+              padding: '0.75rem 1rem',
+              borderTop: '1px solid #eee',
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: '0.875rem',
+              backgroundColor: '#f9f9f9'
+            }}>
+              <span>{comic.views} views</span>
+              <span>{comic.likes} likes</span>
+              <span>{comic.comments} comments</span>
+            </div>
           </div>
-        </Tab>
-        <Tab eventKey="analytics" title="Analytics">
-          <div className="text-center p-5 border rounded">
-            <i className="bi bi-bar-chart" style={{ fontSize: '2rem' }}></i>
-            <h4 className="mt-3">Analytics Dashboard</h4>
-            <p className="text-muted">Detailed analytics showing views, likes, comments, and subscriptions over time</p>
-          </div>
-        </Tab>
-        <Tab eventKey="settings" title="Settings">
-          <div className="text-center p-5 border rounded">
-            <i className="bi bi-gear" style={{ fontSize: '2rem' }}></i>
-            <h4 className="mt-3">Settings Panel</h4>
-            <p className="text-muted">Update your profile, payment information, and notification preferences</p>
-          </div>
-        </Tab>
-      </Tabs>
-    </Container>
+        ))}
+      </div>
+    </div>
   );
 }
 
