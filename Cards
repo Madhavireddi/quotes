@@ -10,6 +10,8 @@ interface Comic {
   views: number;
   likes: number;
   comments: number;
+  subscriptions: number;
+  cost: number;
   lastUpdated: string;
 }
 
@@ -23,10 +25,12 @@ function CreatorDashboardPage() {
       title: "The Adventures of Space Cat",
       description: "Follow Space Cat as he explores the galaxy and makes new friends.",
       coverImage: "/assets/featured_comic1.jpg?height=200&width=200",
-      chapters: 12,     
+      chapters: 12,
       views: 5432,
       likes: 423,
       comments: 87,
+      subscriptions: 104,
+      cost: 5.99,
       lastUpdated: "2023-04-15",
     },
     {
@@ -38,6 +42,8 @@ function CreatorDashboardPage() {
       views: 3211,
       likes: 256,
       comments: 42,
+      subscriptions: 89,
+      cost: 3.5,
       lastUpdated: "2023-05-02",
     },
     {
@@ -49,6 +55,8 @@ function CreatorDashboardPage() {
       views: 1876,
       likes: 132,
       comments: 28,
+      subscriptions: 67,
+      cost: 2.99,
       lastUpdated: "2023-05-10",
     },
   ]);
@@ -75,45 +83,53 @@ function CreatorDashboardPage() {
   return (
     <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <div style={{marginBottom:'1.5rem'}}>
-          <div style={{color:"purple"}}>
-        <h1>Creator Dashboard</h1>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{ color: "purple" }}>
+            <h1>Creator Dashboard</h1>
+          </div>
+          <p>Manage Your comics and track your performance</p>
         </div>
-        <p>Manage Your comics and track your performance</p>
-        </div>
-        <div><br/>
-        <button className="btn btn-primary" onClick={() => navigate('/create')}>
-          + Create New Comic
-        </button>
-       
+        <div>
+          <br />
+          <button className="btn btn-primary" onClick={() => navigate('/create')}>
+            + Create New Comic
+          </button>
         </div>
       </div>
 
       <ul className="nav nav-tabs mb-4 ms-1 me-1">
         <li className="nav-item me-3">
-          <span className="nav-link" style={{ cursor: 'pointer',marginRight:"90px",backgroundColor:"purple"}}>My Comics</span>
+          <span className="nav-link" style={{ cursor: 'pointer', marginRight: "90px", backgroundColor: "purple", color: "white" }}>
+            My Comics
+          </span>
         </li>
         <li className="nav-item">
-         
-          <span className="nav-link" style={{ cursor: 'pointer',marginLeft:"90px",backgroundColor:"purple"}}>Upload Comics</span>
-          
+          <span className="nav-link" style={{ cursor: 'pointer', marginLeft: "90px", backgroundColor: "purple", color: "white" }}>
+            Upload Comics
+          </span>
         </li>
       </ul>
 
       <div className="row">
         {comics.map((comic) => (
           <div key={comic.id} className="col-md-4 mb-4">
-            <div className="card h-100">
-              <img src={comic.coverImage} className="card-img-top" alt={comic.title} />
+            <div className="card h-100 shadow-sm">
+              <img src={comic.coverImage} className="card-img-top" alt={comic.title} style={{ height: "300px", objectFit: "cover" }} />
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title">{comic.title}</h5>
                 <p className="card-text">{comic.description}</p>
-                <small className="text-muted mt-auto">{comic.chapters} chapters - Last updated: {comic.lastUpdated}</small>
+                <small className="text-muted mb-2">{comic.chapters} chapters - Last updated: {comic.lastUpdated}</small>
+                <ul className="list-unstyled small mt-auto">
+                  <li><strong>Views:</strong> {comic.views}</li>
+                  <li><strong>Likes:</strong> {comic.likes}</li>
+                  <li><strong>Comments:</strong> {comic.comments}</li>
+                  <li><strong>Subscriptions:</strong> {comic.subscriptions}</li>
+                  <li><strong>Cost:</strong> ${comic.cost.toFixed(2)}</li>
+                </ul>
               </div>
-              <div className="card-footer d-flex justify-content-between text-muted small">
-                <span>{comic.views} views</span>
-                <span>{comic.likes} likes</span>
-                <span>{comic.comments} comments</span>
+              <div className="card-footer d-flex justify-content-between">
+                <button className="btn btn-sm btn-outline-primary" onClick={() => navigate(`/comic/${comic.id}/edit`)}>Edit</button>
+                <button className="btn btn-sm btn-outline-success" onClick={() => navigate(`/comic/${comic.id}`)}>View</button>
               </div>
             </div>
           </div>
