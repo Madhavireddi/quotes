@@ -89,15 +89,14 @@ function CreatorDashboardPage() {
         </div>
       </div>
 
-      <ul className="nav nav-tabs mb-4">
-        <li className="nav-item">
-          <span className="nav-link active" style={{ cursor: 'pointer' }}>My Comics</span>
+      <ul className="nav nav-tabs mb-4 ms-1 me-1">
+        <li className="nav-item me-3">
+          <span className="nav-link" style={{ cursor: 'pointer',marginRight:"90px",backgroundColor:"purple"}}>My Comics</span>
         </li>
         <li className="nav-item">
-          <span className="nav-link text-muted" style={{ cursor: 'pointer' }}>Analytics</span>
-        </li>
-        <li className="nav-item">
-          <span className="nav-link text-muted" style={{ cursor: 'pointer' }}>Settings</span>
+         
+          <span className="nav-link" style={{ cursor: 'pointer',marginLeft:"90px",backgroundColor:"purple"}}>Upload Comics</span>
+          
         </li>
       </ul>
 
