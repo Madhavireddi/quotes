@@ -69,55 +69,45 @@ function CreatorDashboardPage() {
   }, [loading, user, navigate]);
 
   if (loading) {
-    return <div style={{ textAlign: 'center', marginTop: '2rem' }}>Loading...</div>;
+    return <div className="text-center mt-5">Loading...</div>;
   }
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '1.5rem'
-      }}>
+    <div className="container py-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
         <h1>Creator Dashboard</h1>
-        <button onClick={() => navigate('/create')}>+ Create New Comic</button>
+        <button className="btn btn-primary" onClick={() => navigate('/create')}>
+          + Create New Comic
+        </button>
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <span style={{ marginRight: '1rem', fontWeight: 'bold' }}>My Comics</span>
-        <span style={{ marginRight: '1rem', color: 'gray' }}>Analytics</span>
-        <span style={{ color: 'gray' }}>Settings</span>
-      </div>
+      <ul className="nav nav-tabs mb-4">
+        <li className="nav-item">
+          <span className="nav-link active" style={{ cursor: 'pointer' }}>My Comics</span>
+        </li>
+        <li className="nav-item">
+          <span className="nav-link text-muted" style={{ cursor: 'pointer' }}>Analytics</span>
+        </li>
+        <li className="nav-item">
+          <span className="nav-link text-muted" style={{ cursor: 'pointer' }}>Settings</span>
+        </li>
+      </ul>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+      <div className="row">
         {comics.map((comic) => (
-          <div key={comic.id} style={{
-            border: '1px solid #ccc',
-            borderRadius: '8px',
-            width: '300px',
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
-            background: '#fff'
-          }}>
-            <img src={comic.coverImage} alt={comic.title} style={{ width: '100%' }} />
-            <div style={{ padding: '1rem', flexGrow: 1 }}>
-              <h3 style={{ margin: '0 0 0.5rem' }}>{comic.title}</h3>
-              <p>{comic.description}</p>
-              <small>{comic.chapters} chapters - Last updated: {comic.lastUpdated}</small>
-            </div>
-            <div style={{
-              padding: '0.75rem 1rem',
-              borderTop: '1px solid #eee',
-              display: 'flex',
-              justifyContent: 'space-between',
-              fontSize: '0.875rem',
-              backgroundColor: '#f9f9f9'
-            }}>
-              <span>{comic.views} views</span>
-              <span>{comic.likes} likes</span>
-              <span>{comic.comments} comments</span>
+          <div key={comic.id} className="col-md-4 mb-4">
+            <div className="card h-100">
+              <img src={comic.coverImage} className="card-img-top" alt={comic.title} />
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title">{comic.title}</h5>
+                <p className="card-text">{comic.description}</p>
+                <small className="text-muted mt-auto">{comic.chapters} chapters - Last updated: {comic.lastUpdated}</small>
+              </div>
+              <div className="card-footer d-flex justify-content-between text-muted small">
+                <span>{comic.views} views</span>
+                <span>{comic.likes} likes</span>
+                <span>{comic.comments} comments</span>
+              </div>
             </div>
           </div>
         ))}
