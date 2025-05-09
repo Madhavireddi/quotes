@@ -22,8 +22,8 @@ function CreatorDashboardPage() {
       id: "1",
       title: "The Adventures of Space Cat",
       description: "Follow Space Cat as he explores the galaxy and makes new friends.",
-      coverImage: "/placeholder.svg",
-      chapters: 12,
+      coverImage: "/assets/featured_comic1.jpg?height=200&width=200",
+      chapters: 12,     
       views: 5432,
       likes: 423,
       comments: 87,
@@ -33,7 +33,7 @@ function CreatorDashboardPage() {
       id: "2",
       title: "Mystic Realms",
       description: "A fantasy world where magic and technology collide.",
-      coverImage: "/placeholder.svg",
+      coverImage: "/assets/featured_comic2.png?height=300&width=200",
       chapters: 8,
       views: 3211,
       likes: 256,
@@ -44,7 +44,7 @@ function CreatorDashboardPage() {
       id: "3",
       title: "Urban Legends",
       description: "Stories of mysterious happenings in the big city.",
-      coverImage: "/placeholder.svg",
+      coverImage: "/assets/featured_comic3.jpg?height=300&width=200",
       chapters: 5,
       views: 1876,
       likes: 132,
@@ -75,10 +75,18 @@ function CreatorDashboardPage() {
   return (
     <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
+        <div style={{marginBottom:'1.5rem'}}>
+          <div style={{color:"purple"}}>
         <h1>Creator Dashboard</h1>
+        </div>
+        <p>Manage Your comics and track your performance</p>
+        </div>
+        <div><br/>
         <button className="btn btn-primary" onClick={() => navigate('/create')}>
           + Create New Comic
         </button>
+       
+        </div>
       </div>
 
       <ul className="nav nav-tabs mb-4">
