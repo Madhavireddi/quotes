@@ -95,16 +95,4 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-5 text-white bg-primary text-center">
-        <div className="container">
-          <h2 className="fw-bold mb-3">Ready to Get Started?</h2>
-          <p className="mb-4">Join ComicGen today and unleash your inner artist.</p>
-          <Link href="/auth/register" className="btn btn-light btn-lg">Sign Up Now</Link>
-        </div>
-      </section>
-    </>
-  )
-}
 
-export default Home
