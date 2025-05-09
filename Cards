@@ -1,36 +1,29 @@
-"use client"
-
-import { Navbar } from "@/components/layout/navbar"
-import { useAuth } from "@/lib/auth-context"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { BarChart, BookOpen, Edit, Plus, Settings, Trash, Upload } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Link from "next/link"
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button, Card, Container, Nav, Tab, Tabs } from 'react-bootstrap';
 
 interface Comic {
-  id: string
-  title: string
-  description: string
-  coverImage: string
-  chapters: number
-  views: number
-  likes: number
-  comments: number
-  lastUpdated: string
+  id: string;
+  title: string;
+  description: string;
+  coverImage: string;
+  chapters: number;
+  views: number;
+  likes: number;
+  comments: number;
+  lastUpdated: string;
 }
 
-export default function CreatorDashboardPage() {
-  const { user, loading } = useAuth()
-  const router = useRouter()
+function CreatorDashboardPage() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null); // Replace with actual auth logic
+  const [loading, setLoading] = useState(true);
   const [comics, setComics] = useState<Comic[]>([
     {
       id: "1",
       title: "The Adventures of Space Cat",
       description: "Follow Space Cat as he explores the galaxy and makes new friends.",
-      coverImage: "/placeholder.svg?height=150&width=250",
+      coverImage: "/placeholder.svg",
       chapters: 12,
       views: 5432,
       likes: 423,
@@ -41,7 +34,7 @@ export default function CreatorDashboardPage() {
       id: "2",
       title: "Mystic Realms",
       description: "A fantasy world where magic and technology collide.",
-      coverImage: "/placeholder.svg?height=150&width=250",
+      coverImage: "/placeholder.svg",
       chapters: 8,
       views: 3211,
       likes: 256,
@@ -52,147 +45,85 @@ export default function CreatorDashboardPage() {
       id: "3",
       title: "Urban Legends",
       description: "Stories of mysterious happenings in the big city.",
-      coverImage: "/placeholder.svg?height=150&width=250",
+      coverImage: "/placeholder.svg",
       chapters: 5,
       views: 1876,
       likes: 132,
       comments: 28,
       lastUpdated: "2023-05-10",
     },
-  ])
+  ]);
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push("/auth/login")
-    } else if (!loading && user && user.role !== "creator") {
-      router.push("/")
+    // Mock loading
+    setTimeout(() => {
+      const mockUser = { role: "creator" }; // Replace with real auth check
+      setUser(mockUser);
+      setLoading(false);
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      if (!user) navigate('/auth/login');
+      else if (user.role !== 'creator') navigate('/');
     }
-  }, [user, loading, router])
+  }, [loading, user, navigate]);
 
   if (loading) {
-    return (
-      <>
-        <Navbar />
-        <div className="container mx-auto p-4 flex items-center justify-center min-h-[50vh]">
-          <p>Loading...</p>
-        </div>
-      </>
-    )
-  }
-
-  if (!user || user.role !== "creator") {
-    return null // Will redirect in useEffect
+    return <Container className="text-center mt-5">Loading...</Container>;
   }
 
   return (
-    <>
-      <Navbar />
-      <div className="container mx-auto p-4">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Creator Dashboard</h1>
-          <Button asChild>
-            <Link href="/create">
-              <Plus className="mr-2 h-4 w-4" /> Create New Comic
-            </Link>
-          </Button>
-        </div>
-
-        <Tabs defaultValue="comics" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
-            <TabsTrigger value="comics">My Comics</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="comics" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {comics.map((comic) => (
-                <Card key={comic.id} className="overflow-hidden">
-                  <CardHeader className="p-0">
-                    <img
-                      src={comic.coverImage || "/placeholder.svg"}
-                      alt={comic.title}
-                      className="w-full h-40 object-cover"
-                    />
-                  </CardHeader>
-                  <CardContent className="p-4">
-                    <CardTitle>{comic.title}</CardTitle>
-                    <CardDescription className="line-clamp-2 mt-2">{comic.description}</CardDescription>
-                    <div className="flex justify-between mt-4 text-sm text-muted-foreground">
-                      <div className="flex items-center">
-                        <BookOpen className="h-4 w-4 mr-1" />
-                        <span>{comic.chapters} chapters</span>
-                      </div>
-                      <div>Last updated: {comic.lastUpdated}</div>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="bg-muted/50 p-4 flex justify-between">
-                    <div className="flex space-x-4 text-sm">
-                      <div>{comic.views} views</div>
-                      <div>{comic.likes} likes</div>
-                      <div>{comic.comments} comments</div>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button variant="outline" size="icon">
-                        <Edit className="h-4 w-4" />
-                        <span className="sr-only">Edit</span>
-                      </Button>
-                      <Button variant="outline" size="icon">
-                        <Upload className="h-4 w-4" />
-                        <span className="sr-only">Upload</span>
-                      </Button>
-                      <Button variant="outline" size="icon" className="text-destructive">
-                        <Trash className="h-4 w-4" />
-                        <span className="sr-only">Delete</span>
-                      </Button>
-                    </div>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="analytics">
-            <Card>
-              <CardHeader>
-                <CardTitle>Analytics Overview</CardTitle>
-                <CardDescription>View statistics for all your comics</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-80 flex items-center justify-center border rounded-md">
-                  <div className="flex flex-col items-center text-center p-6">
-                    <BarChart className="h-10 w-10 mb-4 text-muted-foreground" />
-                    <h3 className="text-lg font-medium">Analytics Dashboard</h3>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Detailed analytics showing views, likes, comments, and subscriptions over time
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="settings">
-            <Card>
-              <CardHeader>
-                <CardTitle>Account Settings</CardTitle>
-                <CardDescription>Manage your creator profile and preferences</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-80 flex items-center justify-center border rounded-md">
-                  <div className="flex flex-col items-center text-center p-6">
-                    <Settings className="h-10 w-10 mb-4 text-muted-foreground" />
-                    <h3 className="text-lg font-medium">Settings Panel</h3>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Update your profile, payment information, and notification preferences
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+    <Container className="mt-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1>Creator Dashboard</h1>
+        <Button onClick={() => navigate('/create')}>+ Create New Comic</Button>
       </div>
-    </>
-  )
+
+      <Tabs defaultActiveKey="comics" className="mb-3">
+        <Tab eventKey="comics" title="My Comics">
+          <div className="row">
+            {comics.map((comic) => (
+              <div key={comic.id} className="col-md-4 mb-4">
+                <Card>
+                  <Card.Img variant="top" src={comic.coverImage} />
+                  <Card.Body>
+                    <Card.Title>{comic.title}</Card.Title>
+                    <Card.Text>{comic.description}</Card.Text>
+                    <small className="text-muted">
+                      {comic.chapters} chapters - Last updated: {comic.lastUpdated}
+                    </small>
+                  </Card.Body>
+                  <Card.Footer>
+                    <div className="d-flex justify-content-between">
+                      <small>{comic.views} views</small>
+                      <small>{comic.likes} likes</small>
+                      <small>{comic.comments} comments</small>
+                    </div>
+                  </Card.Footer>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </Tab>
+        <Tab eventKey="analytics" title="Analytics">
+          <div className="text-center p-5 border rounded">
+            <i className="bi bi-bar-chart" style={{ fontSize: '2rem' }}></i>
+            <h4 className="mt-3">Analytics Dashboard</h4>
+            <p className="text-muted">Detailed analytics showing views, likes, comments, and subscriptions over time</p>
+          </div>
+        </Tab>
+        <Tab eventKey="settings" title="Settings">
+          <div className="text-center p-5 border rounded">
+            <i className="bi bi-gear" style={{ fontSize: '2rem' }}></i>
+            <h4 className="mt-3">Settings Panel</h4>
+            <p className="text-muted">Update your profile, payment information, and notification preferences</p>
+          </div>
+        </Tab>
+      </Tabs>
+    </Container>
+  );
 }
+
+export default CreatorDashboardPage;
