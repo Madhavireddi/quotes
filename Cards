@@ -1,92 +1,144 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useUser } from "@clerk/clerk-react";
-import axios from "axios";
-import toast from "react-hot-toast";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const CreatorDashboardPage = () => {
-  const [comics, setComics] = useState([]);
-  const { user } = useUser();
+interface Comic {
+  id: string;
+  title: string;
+  description: string;
+  coverImage: string;
+  chapters: number;
+  views: number;
+  likes: number;
+  comments: number;
+  subscriptions: number;
+  cost: number;
+  lastUpdated: string;
+}
+
+function CreatorDashboardPage() {
   const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [comics, setComics] = useState<Comic[]>([
+    {
+      id: "1",
+      title: "The Adventures of Space Cat",
+      description: "Follow Space Cat as he explores the galaxy and makes new friends.",
+      coverImage: "/assets/featured_comic1.jpg?height=200&width=200",
+      chapters: 12,
+      views: 5432,
+      likes: 423,
+      comments: 87,
+      subscriptions: 104,
+      cost: 5.99,
+      lastUpdated: "2023-04-15",
+    },
+    {
+      id: "2",
+      title: "Mystic Realms",
+      description: "A fantasy world where magic and technology collide.",
+      coverImage: "/assets/featured_comic2.png?height=300&width=200",
+      chapters: 8,
+      views: 3211,
+      likes: 256,
+      comments: 42,
+      subscriptions: 89,
+      cost: 3.5,
+      lastUpdated: "2023-05-02",
+    },
+    {
+      id: "3",
+      title: "Urban Legends",
+      description: "Stories of mysterious happenings in the big city.",
+      coverImage: "/assets/featured_comic3.jpg?height=300&width=200",
+      chapters: 5,
+      views: 1876,
+      likes: 132,
+      comments: 28,
+      subscriptions: 67,
+      cost: 2.99,
+      lastUpdated: "2023-05-10",
+    },
+  ]);
 
   useEffect(() => {
-    const fetchComics = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/comic/creator/${user.id}`
-        );
-        setComics(response.data.data);
-      } catch (error) {
-        toast.error("Failed to fetch comics");
-      }
-    };
+    setTimeout(() => {
+      const mockUser = { role: "creator" };
+      setUser(mockUser);
+      setLoading(false);
+    }, 1000);
+  }, []);
 
-    fetchComics();
-  }, [user]);
+  useEffect(() => {
+    if (!loading) {
+      if (!user) navigate('/auth/login');
+      else if (user.role !== 'creator') navigate('/');
+    }
+  }, [loading, user, navigate]);
+
+  if (loading) {
+    return <div className="text-center mt-5">Loading...</div>;
+  }
 
   return (
-    <div className="container mt-5 text-white" style={{ backgroundColor: "#121212", minHeight: "100vh", fontFamily: "Poppins, sans-serif" }}>
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Creator Dashboard</h2>
-        <button
-          onClick={() => navigate("/create-comic")}
-          className="btn"
-          style={{ backgroundColor: "#a259ff", color: "#fff", borderRadius: "6px" }}
-        >
-          + Create New Comic
-        </button>
+    <div className="container py-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{ color: "purple" }}>
+            <h1>Creator Dashboard</h1>
+          </div>
+          <p>Manage Your comics and track your performance</p>
+        </div>
+        <div>
+          <br />
+          <button className="btn btn-primary" onClick={() => navigate('/create')}>
+            + Create New Comic
+          </button>
+        </div>
       </div>
 
-      <ul className="nav nav-tabs mb-4 ms-1 me-1 border-0">
-        {["My Comics", "Upload Chapter", "Analytics", "Earnings"].map(tab => (
-          <li className="nav-item me-3" key={tab}>
-            <span
-              className="nav-link"
-              style={{
-                cursor: "pointer",
-                backgroundColor: tab === "My Comics" ? "#a259ff" : "transparent",
-                color: tab === "My Comics" ? "white" : "#a259ff",
-                borderRadius: "8px",
-                padding: "8px 16px"
-              }}
-            >
-              {tab}
-            </span>
-          </li>
-        ))}
+      <ul className="nav nav-tabs mb-4 ms-1 me-1">
+        <li className="nav-item me-3">
+          <span className="nav-link" style={{ cursor: 'pointer', marginRight: "90px", backgroundColor: "purple", color: "white" }}>
+            My Comics
+          </span>
+        </li>
+        <li className="nav-item">
+          <span className="nav-link" style={{ cursor: 'pointer', marginLeft: "90px", backgroundColor: "purple", color: "white" }}>
+            Upload Comics
+          </span>
+        </li>
       </ul>
 
-      {comics.length === 0 ? (
-        <p className="text-muted">You haven't created any comics yet.</p>
-      ) : (
-        <div className="row">
-          {comics.map((comic) => (
-            <div key={comic._id} className="col-md-4 mb-4">
-              <div className="p-3 rounded" style={{ backgroundColor: "#1e1e1e", color: "#fff", boxShadow: "0 0 10px rgba(0,0,0,0.3)", border: "1px solid #333" }}>
-                <div className="mb-2" style={{ backgroundColor: "#333", height: "150px", borderRadius: "6px" }}></div>
-                <h5>{comic.title}</h5>
-                <p className="text-muted" style={{ fontSize: "0.9rem" }}>{comic.description}</p>
-                <div className="d-flex justify-content-between text-muted small mt-2">
-                  <div><i className="bi bi-layers"></i> {comic.chapters} Chapters</div>
-                  <div><i className="bi bi-person"></i> {comic.subscriptions}</div>
+      <div className="row">
+        {comics.map((comic) => (
+          <div key={comic.id} className="col-md-4 mb-4">
+            <div className="card h-100 shadow-sm">
+              <img src={comic.coverImage} className="card-img-top" alt={comic.title} style={{ height: "450px", objectFit: "cover" }} />
+              <div className="card-body d-flex flex-column">
+                <h5 className="card-title">{comic.title}</h5>
+                <p className="card-text">{comic.description}</p>
+                <small className="text-muted mb-2">{comic.chapters} chapters - Last updated: {comic.lastUpdated}</small>
+                <ul className="list-unstyled small mt-auto">
+                <i className="bi bi-heart" style={{color:"red"}}></i> : <span style={{paddingRight:"80px"}}>{comic.likes}</span> 
+                <i className="bi bi-eye" style={{color:"blue"}}></i> : <span style={{paddingRight:"0px"}}>{comic.views}</span>
+                  
+                  <li className='bi bi-person'> {comic.subscriptions}</li>
+                  <li> ${comic.cost.toFixed(2)}</li>
+                </ul>
+              </div>
+              <div className="card-footer d-flex justify-content-between">
+                <div>
+                <button className="btn btn-sm btn-outline-primary bi bi-pencil-square"onClick={() => navigate(`/comic/${comic.id}/edit`)}>Edit</button>
                 </div>
-                <div className="d-flex justify-content-between text-muted small mt-2">
-                  <div><i className="bi bi-eye"></i> {comic.views}</div>
-                  <div><i className="bi bi-currency-dollar"></i> {comic.cost.toFixed(2)}</div>
-                </div>
-                <div className="mt-3 d-flex justify-content-between">
-                  <button className="btn btn-sm btn-outline-light" onClick={() => navigate(`/comic/${comic._id}/edit`)}>
-                    Edit
-                  </button>
-                  <button className="btn btn-sm btn-outline-secondary">View</button>
-                </div>
+                <span className="bi bi-book">View</span>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
+}
 
 export default CreatorDashboardPage;
