@@ -83,28 +83,23 @@ function CreatorDashboardPage() {
   return (
     <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <div style={{ marginBottom: '1.5rem' }}>
-          <div style={{ color: "purple" }}>
-            <h1>Creator Dashboard</h1>
-          </div>
+        <div>
+          <h1 style={{ color: 'purple' }}>Creator Dashboard</h1>
           <p>Manage Your comics and track your performance</p>
         </div>
-        <div>
-          <br />
-          <button className="btn btn-primary" onClick={() => navigate('/create')}>
-            + Create New Comic
-          </button>
-        </div>
+        <button className="btn btn-primary" onClick={() => navigate('/create')}>
+          + Create New Comic
+        </button>
       </div>
 
-      <ul className="nav nav-tabs mb-4 ms-1 me-1">
-        <li className="nav-item me-3">
-          <span className="nav-link" style={{ cursor: 'pointer', marginRight: "90px", backgroundColor: "purple", color: "white" }}>
+      <ul className="nav nav-tabs mb-4">
+        <li className="nav-item">
+          <span className="nav-link active" style={{ backgroundColor: 'purple', color: 'white', cursor: 'pointer' }}>
             My Comics
           </span>
         </li>
         <li className="nav-item">
-          <span className="nav-link" style={{ cursor: 'pointer', marginLeft: "90px", backgroundColor: "purple", color: "white" }}>
+          <span className="nav-link" style={{ backgroundColor: '#f0f0f0', color: 'black', cursor: 'pointer' }}>
             Upload Comics
           </span>
         </li>
@@ -114,24 +109,29 @@ function CreatorDashboardPage() {
         {comics.map((comic) => (
           <div key={comic.id} className="col-md-4 mb-4">
             <div className="card h-100 shadow-sm">
-              <img src={comic.coverImage} className="card-img-top" alt={comic.title} style={{ height: "450px", objectFit: "cover" }} />
+              <img src={comic.coverImage} className="card-img-top" alt={comic.title} style={{ height: "400px", objectFit: "cover" }} />
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title">{comic.title}</h5>
                 <p className="card-text">{comic.description}</p>
-                <small className="text-muted mb-2">{comic.chapters} chapters - Last updated: {comic.lastUpdated}</small>
-                <ul className="list-unstyled small mt-auto">
-                <i className="bi bi-heart" style={{color:"red"}}></i> : <span style={{paddingRight:"80px"}}>{comic.likes}</span> 
-                <i className="bi bi-eye" style={{color:"blue"}}></i> : <span style={{paddingRight:"0px"}}>{comic.views}</span>
-                  
-                  <li className='bi bi-person'> {comic.subscriptions}</li>
-                  <li> ${comic.cost.toFixed(2)}</li>
-                </ul>
+                <small className="text-muted">{comic.chapters} chapters - Last updated: {comic.lastUpdated}</small>
+                <div className="mt-3">
+                  <div className="d-flex justify-content-between text-muted mb-2">
+                    <span><i className="bi bi-heart" style={{ color: "red" }}></i> {comic.likes}</span>
+                    <span><i className="bi bi-eye" style={{ color: "blue" }}></i> {comic.views}</span>
+                  </div>
+                  <div className="d-flex justify-content-between text-muted">
+                    <span><i className="bi bi-person"></i> {comic.subscriptions}</span>
+                    <span>${comic.cost.toFixed(2)}</span>
+                  </div>
+                </div>
               </div>
               <div className="card-footer d-flex justify-content-between">
-                <div>
-                <button className="btn btn-sm btn-outline-primary bi bi-pencil-square"onClick={() => navigate(`/comic/${comic.id}/edit`)}>Edit</button>
-                </div>
-                <span className="bi bi-book">View</span>
+                <button className="btn btn-sm btn-outline-primary" onClick={() => navigate(`/comic/${comic.id}/edit`)}>
+                  <i className="bi bi-pencil-square"></i> Edit
+                </button>
+                <button className="btn btn-sm btn-outline-secondary">
+                  <i className="bi bi-book"></i> View
+                </button>
               </div>
             </div>
           </div>
