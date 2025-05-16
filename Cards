@@ -114,22 +114,24 @@ function CreatorDashboardPage() {
         {comics.map((comic) => (
           <div key={comic.id} className="col-md-4 mb-4">
             <div className="card h-100 shadow-sm">
-              <img src={comic.coverImage} className="card-img-top" alt={comic.title} style={{ height: "300px", objectFit: "cover" }} />
+              <img src={comic.coverImage} className="card-img-top" alt={comic.title} style={{ height: "450px", objectFit: "cover" }} />
               <div className="card-body d-flex flex-column">
                 <h5 className="card-title">{comic.title}</h5>
                 <p className="card-text">{comic.description}</p>
                 <small className="text-muted mb-2">{comic.chapters} chapters - Last updated: {comic.lastUpdated}</small>
                 <ul className="list-unstyled small mt-auto">
-                  <li><strong>Views:</strong> {comic.views}</li>
-                  <li><strong>Likes:</strong> {comic.likes}</li>
-                  <li><strong>Comments:</strong> {comic.comments}</li>
-                  <li><strong>Subscriptions:</strong> {comic.subscriptions}</li>
-                  <li><strong>Cost:</strong> ${comic.cost.toFixed(2)}</li>
+                <i className="bi bi-heart" style={{color:"red"}}></i> : <span style={{paddingRight:"80px"}}>{comic.likes}</span> 
+                <i className="bi bi-eye" style={{color:"blue"}}></i> : <span style={{paddingRight:"0px"}}>{comic.views}</span>
+                  
+                  <li className='bi bi-person'> {comic.subscriptions}</li>
+                  <li> ${comic.cost.toFixed(2)}</li>
                 </ul>
               </div>
               <div className="card-footer d-flex justify-content-between">
-                <button className="btn btn-sm btn-outline-primary" onClick={() => navigate(`/comic/${comic.id}/edit`)}>Edit</button>
-                <button className="btn btn-sm btn-outline-success" onClick={() => navigate(`/comic/${comic.id}`)}>View</button>
+                <div>
+                <button className="btn btn-sm btn-outline-primary bi bi-pencil-square"onClick={() => navigate(`/comic/${comic.id}/edit`)}>Edit</button>
+                </div>
+                <span className="bi bi-book">View</span>
               </div>
             </div>
           </div>
